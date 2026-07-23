@@ -1,0 +1,365 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Patient Dashboard - HealthCare HMS{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+  <aside class="dashboard-sidebar" role="navigation" aria-label="Patient navigation">
+    <div class="sidebar-header">
+      <h4>My Menu</h4>
+      <button class="sidebar-toggle" aria-label="Toggle sidebar">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-title">Overview</div>
+      <a href="#" class="sidebar-item active">
+        <i class="fas fa-chart-pie"></i>
+        <span>Dashboard</span>
+      </a>
+
+      <div class="sidebar-section-title">Appointments</div>
+      <a href="{% url 'hospital_list' %}" class="sidebar-item">
+        <i class="fas fa-calendar-plus"></i>
+        <span>Book Appointment</span>
+      </a>
+      <a href="{% url 'my_appointments' %}" class="sidebar-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>My Appointments</span>
+        <span class="sidebar-badge">3</span>
+      </a>
+
+      <div class="sidebar-section-title">Profile</div>
+      <a href="{% url 'patient_profile' %}" class="sidebar-item">
+        <i class="fas fa-user-circle"></i>
+        <span>My Profile</span>
+      </a>
+      <a href="#" class="sidebar-item">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+  </aside>
+
+  <div class="sidebar-overlay"></div>
+
+  <main class="dashboard-main">
+    <div class="dashboard-topbar">
+      <div class="topbar-left">
+        <button class="sidebar-mobile-toggle" aria-label="Open sidebar">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1>My Dashboard</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search doctors, hospitals..." aria-label="Search">
+        </div>
+        <div class="dropdown">
+          <button class="notification-btn dropdown-toggle" aria-label="Notifications">
+            <i class="fas fa-bell"></i>
+            <span class="notification-dot"></span>
+          </button>
+          <div class="dropdown-menu">
+            <div class="dropdown-menu-header">
+              <h4>Notifications</h4>
+              <span>Mark all read</span>
+            </div>
+            <div class="notification-item unread">
+              <div class="notification-icon green"><i class="fas fa-check-circle"></i></div>
+              <div>
+                <div class="notification-text">Appointment <strong>#304</strong> confirmed with <strong>Dr. Sharma</strong></div>
+                <div class="notification-time">1 hour ago</div>
+              </div>
+            </div>
+            <div class="notification-item unread">
+              <div class="notification-icon blue"><i class="fas fa-calendar-reminder"></i></div>
+              <div>
+                <div class="notification-text">Reminder: Appointment tomorrow at <strong>10:30 AM</strong></div>
+                <div class="notification-time">3 hours ago</div>
+              </div>
+            </div>
+            <div class="dropdown-menu-footer">
+              <a href="#">View all notifications</a>
+            </div>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="profile-btn dropdown-toggle" aria-label="Profile menu">
+            <div class="profile-avatar">{{ request.user.get_full_name|first|default:"P" }}</div>
+            <span class="profile-name">{{ request.user.get_full_name|default:request.user.username }}</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="dropdown-menu profile-dropdown-menu">
+            <div class="profile-dropdown-header">
+              <h4>{{ request.user.get_full_name|default:request.user.username }}</h4>
+              <p>Patient</p>
+            </div>
+            <a href="{% url 'patient_profile' %}" class="dropdown-item"><i class="fas fa-user-circle"></i> My Profile</a>
+            <a href="{% url 'my_appointments' %}" class="dropdown-item"><i class="fas fa-calendar-alt"></i> My Appointments</a>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item dark-mode-toggle">
+              <i class="fas fa-moon"></i> Dark Mode
+            </button>
+            <div class="dropdown-divider"></div>
+            <a href="{% url 'logout' %}" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="welcome-banner animate-in">
+      <div class="welcome-banner-content">
+        <div class="welcome-banner-text">
+          <h1>Hello, {{ request.user.get_full_name|default:request.user.username }}! 🏥</h1>
+          <p>Your next appointment is <strong>tomorrow at 10:30 AM</strong> with Dr. Sharma. Stay healthy!</p>
+        </div>
+        <div class="welcome-banner-actions">
+          <a href="{% url 'hospital_list' %}" class="btn"><i class="fas fa-calendar-plus"></i> Book Appointment</a>
+          <a href="{% url 'my_appointments' %}" class="btn"><i class="fas fa-eye"></i> My Appointments</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-card-grid animate-in animate-in-1">
+      <div class="stats-card">
+        <div class="stats-card-icon blue"><i class="fas fa-calendar-day"></i></div>
+        <div class="stats-card-info">
+          <div class="stats-card-label">Upcoming Appointment</div>
+          <div class="stats-card-value" style="font-size:1.1rem;">Tomorrow</div>
+          <div class="stats-card-change" style="color:var(--text-muted);">10:30 AM</div>
+        </div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-card-icon green"><i class="fas fa-check-circle"></i></div>
+        <div class="stats-card-info">
+          <div class="stats-card-label">Completed</div>
+          <div class="stats-card-value">6</div>
+          <div class="stats-card-change up">Total visits</div>
+        </div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-card-icon purple"><i class="fas fa-user-md"></i></div>
+        <div class="stats-card-info">
+          <div class="stats-card-label">Available Doctors</div>
+          <div class="stats-card-value">24</div>
+          <div class="stats-card-change">Across 3 hospitals</div>
+        </div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-card-icon orange"><i class="fas fa-building"></i></div>
+        <div class="stats-card-info">
+          <div class="stats-card-label">Nearby Hospitals</div>
+          <div class="stats-card-value">5</div>
+          <div class="stats-card-change">Within 5 km</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="split-grid animate-in animate-in-2">
+      <div>
+        <div class="section-divider">
+          <h2><i class="fas fa-calendar-alt"></i> My Appointments</h2>
+          <a href="{% url 'my_appointments' %}" class="section-link">View All →</a>
+        </div>
+
+        <div class="appointment-card" style="margin-bottom:var(--space-4);">
+          <div class="appointment-card-header">
+            <div class="appointment-avatar">DS</div>
+            <div class="appointment-body">
+              <h4>Dr. Deepak Sharma</h4>
+              <p>Cardiology • City Hospital</p>
+            </div>
+          </div>
+          <div class="appointment-meta">
+            <div class="appointment-meta-item"><i class="fas fa-calendar"></i> 25 Jul</div>
+            <div class="appointment-meta-item"><i class="fas fa-clock"></i> 10:30 AM</div>
+            <span class="badge badge-approved">Confirmed</span>
+          </div>
+          <div class="appointment-actions">
+            <button class="btn btn-sm btn-outline"><i class="fas fa-eye"></i></button>
+            <button class="btn btn-sm btn-danger" data-modal="cancel-modal"><i class="fas fa-times"></i></button>
+          </div>
+        </div>
+
+        <div class="appointment-card" style="margin-bottom:var(--space-4);">
+          <div class="appointment-card-header">
+            <div class="appointment-avatar">PM</div>
+            <div class="appointment-body">
+              <h4>Dr. Priya Mehta</h4>
+              <p>General Medicine • Metro Hospital</p>
+            </div>
+          </div>
+          <div class="appointment-meta">
+            <div class="appointment-meta-item"><i class="fas fa-calendar"></i> 28 Jul</div>
+            <div class="appointment-meta-item"><i class="fas fa-clock"></i> 02:00 PM</div>
+            <span class="badge badge-pending">Pending</span>
+          </div>
+          <div class="appointment-actions">
+            <button class="btn btn-sm btn-outline"><i class="fas fa-eye"></i></button>
+            <button class="btn btn-sm btn-danger" data-modal="cancel-modal"><i class="fas fa-times"></i></button>
+          </div>
+        </div>
+
+        <div class="appointment-card">
+          <div class="appointment-card-header">
+            <div class="appointment-avatar">VK</div>
+            <div class="appointment-body">
+              <h4>Dr. Vikram Kumar</h4>
+              <p>Orthopedics • Apollo Hospital</p>
+            </div>
+          </div>
+          <div class="appointment-meta">
+            <div class="appointment-meta-item"><i class="fas fa-calendar"></i> 02 Aug</div>
+            <div class="appointment-meta-item"><i class="fas fa-clock"></i> 11:00 AM</div>
+            <span class="badge badge-completed">Completed</span>
+          </div>
+          <div class="appointment-actions">
+            <button class="btn btn-sm btn-outline"><i class="fas fa-eye"></i></button>
+            <button class="btn btn-sm btn-success"><i class="fas fa-redo"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-divider">
+          <h2><i class="fas fa-history"></i> Appointment Timeline</h2>
+        </div>
+        <div class="chart-card" style="margin-bottom:var(--space-5);">
+          <div class="chart-body" style="padding:var(--space-4);">
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot green"></div>
+                <div class="timeline-content">
+                  <div class="timeline-time">Today</div>
+                  <div class="timeline-title">Appointment Completed</div>
+                  <div class="timeline-text">Follow-up with Dr. Sharma - All reports normal</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot blue"></div>
+                <div class="timeline-content">
+                  <div class="timeline-time">20 Jul 2026</div>
+                  <div class="timeline-title">Blood Tests Done</div>
+                  <div class="timeline-text">Complete blood count and lipid profile at City Hospital</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot blue"></div>
+                <div class="timeline-content">
+                  <div class="timeline-time">15 Jul 2026</div>
+                  <div class="timeline-title">First Consultation</div>
+                  <div class="timeline-text">Initial checkup with Dr. Deepak Sharma - Cardiology</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot purple"></div>
+                <div class="timeline-content">
+                  <div class="timeline-time">10 Jul 2026</div>
+                  <div class="timeline-title">Registration Complete</div>
+                  <div class="timeline-text">Registered on HealthCare HMS platform</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-divider">
+          <h2><i class="fas fa-heart"></i> Favorite Doctors</h2>
+        </div>
+        <div class="chart-card">
+          <div class="chart-body" style="padding:var(--space-3);">
+            <div class="fav-doctor-card" style="margin-bottom:var(--space-2);">
+              <div class="fav-doctor-avatar">DS</div>
+              <div class="fav-doctor-info">
+                <div class="fav-doctor-name">Dr. Deepak Sharma</div>
+                <div class="fav-doctor-specialty">Cardiology • City Hospital</div>
+              </div>
+              <div class="fav-doctor-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+            <div class="fav-doctor-card">
+              <div class="fav-doctor-avatar">PM</div>
+              <div class="fav-doctor-info">
+                <div class="fav-doctor-name">Dr. Priya Mehta</div>
+                <div class="fav-doctor-specialty">General Medicine • Metro Hospital</div>
+              </div>
+              <div class="fav-doctor-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="animate-in animate-in-3" style="margin-top:var(--space-6);">
+      <div class="section-divider">
+        <h2><i class="fas fa-clock"></i> Quick Actions</h2>
+      </div>
+      <div class="quick-actions">
+        <a href="{% url 'hospital_list' %}" class="quick-action-btn"><i class="fas fa-calendar-plus"></i> Book Appointment</a>
+        <a href="{% url 'my_appointments' %}" class="quick-action-btn"><i class="fas fa-eye"></i> View Appointments</a>
+        <a href="{% url 'patient_profile' %}" class="quick-action-btn"><i class="fas fa-user-circle"></i> My Profile</a>
+        <a href="#" class="quick-action-btn"><i class="fas fa-phone-alt"></i> Emergency Contact</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="modal-overlay" id="cancel-modal">
+  <div class="modal" onclick="event.stopPropagation();">
+    <div class="modal-header">
+      <h3>Cancel Appointment</h3>
+      <button class="modal-close" aria-label="Close modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="text-align:center;margin-bottom:var(--space-4);">
+        <div style="width:64px;height:64px;border-radius:50%;background:var(--danger-bg);color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto var(--space-4);">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h4 style="margin-bottom:var(--space-2);">Are you sure?</h4>
+        <p style="font-size:0.9rem;color:var(--text-secondary);">This action cannot be undone. The appointment slot will be released.</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline modal-close">Keep Appointment</button>
+      <button class="btn btn-danger">Yes, Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+(function() {
+  var successToast = document.createElement('div');
+  successToast.className = 'toast toast-success show';
+  successToast.innerHTML = '<div class="toast-icon"><i class="fas fa-check"></i></div><div class="toast-message">Appointment booked successfully!</div><button class="toast-close">&times;</button>';
+  var container = document.getElementById('toast-container');
+  if (container) {
+    setTimeout(function() {
+      container.appendChild(successToast);
+      setTimeout(function() {
+        if (successToast.parentNode) successToast.remove();
+      }, 4000);
+    }, 1500);
+    container.addEventListener('click', function(e) {
+      if (e.target.classList.contains('toast-close')) {
+        e.target.closest('.toast').remove();
+      }
+    });
+  }
+})();
+</script>
+{% endblock %}

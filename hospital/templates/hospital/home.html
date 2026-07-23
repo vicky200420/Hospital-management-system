@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block title %}Home - HealthCare HMS{% endblock %}
+{% block content %}
+
+<div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <div class="hero-badge">
+            <i class="fas fa-heartbeat"></i> Trusted Healthcare Since 2020
+        </div>
+        <h1>Your Health Is Our Priority</h1>
+        <p>Book appointments with experienced doctors, manage your health records, and get the care you deserve — all in one place.</p>
+        <div class="hero-actions">
+            {% if user.is_authenticated %}
+                {% if user.role == "PATIENT" %}
+                    <a href="{% url 'patient_dashboard' %}" class="btn btn-white">
+                        <i class="fas fa-columns"></i> My Dashboard
+                    </a>
+                    <a href="{% url 'hospital_list' %}" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,0.6);">
+                        <i class="fas fa-calendar-check"></i> Book Appointment
+                    </a>
+                {% elif user.role == "DOCTOR" %}
+                    <a href="{% url 'doctor_dashboard' %}" class="btn btn-white">
+                        <i class="fas fa-columns"></i> Go to Dashboard
+                    </a>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-white">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="{% url 'patient_register' %}" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,0.6);">
+                    <i class="fas fa-user-plus"></i> Register
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="section animate-in">
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-subtitle">Comprehensive healthcare services tailored to your needs</p>
+    <div class="grid grid-3">
+        <div class="feature-card animate-in animate-in-1">
+            <div class="feature-icon"><i class="fas fa-stethoscope"></i></div>
+            <h3>General Medicine</h3>
+            <p>Complete healthcare services for you and your family with expert physicians.</p>
+        </div>
+        <div class="feature-card animate-in animate-in-2">
+            <div class="feature-icon"><i class="fas fa-heart"></i></div>
+            <h3>Cardiology</h3>
+            <p>Heart specialists with modern diagnostic equipment and advanced treatments.</p>
+        </div>
+        <div class="feature-card animate-in animate-in-3">
+            <div class="feature-icon"><i class="fas fa-brain"></i></div>
+            <h3>Neurology</h3>
+            <p>Expert brain and nervous system care from experienced neurologists.</p>
+        </div>
+    </div>
+</div>
+
+<div class="section animate-in">
+    <h2 class="section-title">Our Departments</h2>
+    <p class="section-subtitle">Specialized departments equipped with modern facilities</p>
+    <div class="grid grid-3">
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-bone"></i></div>
+            <h3>Orthopedics</h3>
+            <p>Expert bone and joint care with advanced surgical techniques.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-child"></i></div>
+            <h3>Pediatrics</h3>
+            <p>Comprehensive care for infants, children, and adolescents.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-hand"></i></div>
+            <h3>Dermatology</h3>
+            <p>Advanced skin, hair, and nail treatments by experienced dermatologists.</p>
+        </div>
+    </div>
+</div>
+
+<div class="section animate-in">
+    <h2 class="section-title">Why Choose Us?</h2>
+    <p class="section-subtitle">We are committed to providing the best healthcare experience</p>
+    <div class="grid grid-3">
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-user-md"></i></div>
+            <h3>Qualified Doctors</h3>
+            <p>Highly experienced specialists with proven track records in their fields.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-ambulance"></i></div>
+            <h3>24/7 Emergency</h3>
+            <p>Round-the-clock emergency services with rapid response teams.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-microscope"></i></div>
+            <h3>Modern Equipment</h3>
+            <p>State-of-the-art medical technology for accurate diagnosis and treatment.</p>
+        </div>
+    </div>
+</div>
+
+<div class="section animate-in">
+    <h2 class="section-title">Hospital Statistics</h2>
+    <p class="section-subtitle">Our achievements in numbers</p>
+    <div class="stats-grid">
+        <div class="stat-card colored">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Expert Doctors</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">15+</div>
+            <div class="stat-label">Departments</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">10K+</div>
+            <div class="stat-label">Happy Patients</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Emergency</div>
+        </div>
+    </div>
+</div>
+
+<div class="emergency-banner animate-in">
+    <i class="fas fa-ambulance" style="font-size:2.5rem;margin-bottom:1rem;display:block;"></i>
+    <h2>Emergency Contact</h2>
+    <div class="emergency-phone">
+        <i class="fas fa-phone-alt"></i> +91 9876543210
+    </div>
+    <p>Available 24 hours a day, 7 days a week for medical emergencies</p>
+</div>
+
+{% endblock %}

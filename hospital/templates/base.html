@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="HealthCare HMS - Modern Hospital Management System">
+    <meta name="theme-color" content="#4f46e5">
+    <title>{% block title %}HealthCare HMS{% endblock %}</title>
+    {% load static %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=5">
+</head>
+<body>
+
+<header class="site-header" role="banner">
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <a href="{% url 'home' %}" class="logo" aria-label="HealthCare HMS Home">
+            <span class="logo-icon">
+                <i class="fas fa-hospital"></i>
+            </span>
+            HealthCare
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links" role="menubar">
+            <li role="none"><a href="{% url 'home' %}" role="menuitem"><i class="fas fa-home"></i> Home</a></li>
+            <li role="none"><a href="{% url 'hospital_list' %}" role="menuitem"><i class="fas fa-building"></i> Hospitals</a></li>
+            <li role="none"><a href="{% url 'department_list' %}" role="menuitem"><i class="fas fa-layer-group"></i> Departments</a></li>
+            <li role="none"><a href="{% url 'doctor_list' %}" role="menuitem"><i class="fas fa-user-md"></i> Doctors</a></li>
+            <li role="none"><a href="{% url 'about' %}" role="menuitem"><i class="fas fa-info-circle"></i> About</a></li>
+            <li role="none"><a href="{% url 'contact' %}" role="menuitem"><i class="fas fa-envelope"></i> Contact</a></li>
+            {% if user.is_authenticated %}
+                {% if user.role == "PATIENT" %}
+                    <li role="none"><a href="{% url 'patient_dashboard' %}" role="menuitem"><i class="fas fa-columns"></i> Dashboard</a></li>
+                {% elif user.role == "DOCTOR" %}
+                    <li role="none"><a href="{% url 'doctor_dashboard' %}" role="menuitem"><i class="fas fa-columns"></i> Dashboard</a></li>
+                {% elif user.role == "ADMIN" %}
+                    <li role="none"><a href="{% url 'admin_dashboard' %}" role="menuitem"><i class="fas fa-columns"></i> Dashboard</a></li>
+                {% endif %}
+                <li role="none"><a href="{% url 'logout' %}" class="nav-cta" role="menuitem"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            {% else %}
+                <li role="none"><a href="{% url 'login' %}" role="menuitem"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                <li role="none"><a href="{% url 'patient_register' %}" class="nav-cta" role="menuitem"><i class="fas fa-user-plus"></i> Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+
+<main class="page-wrapper" role="main">
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} animate-in visible">
+                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </div>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4><i class="fas fa-hospital"></i> HealthCare HMS</h4>
+                <p>Committed to providing quality healthcare with experienced doctors, modern facilities, and compassionate care. Your health is our priority.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                    <li><a href="{% url 'doctor_list' %}">Our Doctors</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>For Patients</h4>
+                <ul>
+                    <li><a href="{% url 'patient_register' %}">Register</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'hospital_list' %}">Book Appointment</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Chennai, Tamil Nadu</li>
+                    <li><i class="fas fa-phone"></i> +91 9876543210</li>
+                    <li><i class="fas fa-envelope"></i> info@healthcare.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 HealthCare Hospital Management System. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+(function() {
+  // Mobile nav toggle
+  var toggle = document.querySelector('.nav-toggle');
+  var nav = document.querySelector('.nav-links');
+  if (toggle && nav) {
+    toggle.addEventListener('click', function() {
+      var open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open);
+      toggle.innerHTML = open
+        ? '<i class="fas fa-times"></i>'
+        : '<i class="fas fa-bars"></i>';
+    });
+    document.addEventListener('click', function(e) {
+      if (!toggle.contains(e.target) && !nav.contains(e.target)) {
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.innerHTML = '<i class="fas fa-bars"></i>';
+      }
+    });
+  }
+
+  // Scroll-triggered animations
+  if ('IntersectionObserver' in window) {
+    var targets = document.querySelectorAll('.animate-in');
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    targets.forEach(function(el) { observer.observe(el); });
+  } else {
+    document.querySelectorAll('.animate-in').forEach(function(el) {
+      el.classList.add('visible');
+    });
+  }
+
+  // Active nav link highlighting
+  var path = window.location.pathname;
+  document.querySelectorAll('.nav-links a').forEach(function(a) {
+    if (a.getAttribute('href') === path) {
+      a.classList.add('active');
+    }
+  });
+
+  // Dark mode toggle
+  var dmToggle = document.querySelector('.dark-mode-toggle');
+  if (dmToggle) {
+    dmToggle.addEventListener('click', function() {
+      document.body.classList.toggle('dark');
+      var icon = dmToggle.querySelector('i');
+      if (icon) {
+        icon.className = document.body.classList.contains('dark')
+          ? 'fas fa-sun'
+          : 'fas fa-moon';
+      }
+    });
+  }
+
+  // Initialize Lucide icons
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+
+  // Dashboard sidebar toggle
+  var sidebarToggle = document.querySelector('.sidebar-toggle');
+  var sidebar = document.querySelector('.dashboard-sidebar');
+  var sidebarOverlay = document.querySelector('.sidebar-overlay');
+  if (sidebarToggle && sidebar) {
+    sidebarToggle.addEventListener('click', function() {
+      sidebar.classList.toggle('collapsed');
+    });
+  }
+  if (sidebarOverlay && sidebar) {
+    sidebarOverlay.addEventListener('click', function() {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('active');
+    });
+  }
+  var sidebarMobileToggle = document.querySelector('.sidebar-mobile-toggle');
+  if (sidebarMobileToggle && sidebar && sidebarOverlay) {
+    sidebarMobileToggle.addEventListener('click', function() {
+      sidebar.classList.toggle('open');
+      sidebarOverlay.classList.toggle('active');
+    });
+  }
+
+  // Dropdown toggles
+  document.querySelectorAll('.dropdown-toggle').forEach(function(dd) {
+    dd.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var menu = dd.nextElementSibling;
+      if (menu && menu.classList.contains('dropdown-menu')) {
+        menu.classList.toggle('show');
+      }
+    });
+  });
+  document.addEventListener('click', function() {
+    document.querySelectorAll('.dropdown-menu.show').forEach(function(m) {
+      m.classList.remove('show');
+    });
+  });
+
+  // Modal toggles
+  document.querySelectorAll('[data-modal]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-modal');
+      var modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  });
+  document.querySelectorAll('.modal-overlay, .modal-close').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var modal = this.closest('.modal-overlay');
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+  document.querySelectorAll('.modal').forEach(function(m) {
+    m.addEventListener('click', function(e) { e.stopPropagation(); });
+  });
+
+  // Table sort
+  document.querySelectorAll('.sortable').forEach(function(th) {
+    th.addEventListener('click', function() {
+      var table = this.closest('table');
+      if (!table) return;
+      var index = Array.from(this.parentNode.children).indexOf(this);
+      var tbody = table.querySelector('tbody');
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      var dir = this.classList.contains('asc') ? -1 : 1;
+      rows.sort(function(a, b) {
+        var aVal = (a.children[index] || {}).textContent || '';
+        var bVal = (b.children[index] || {}).textContent || '';
+        return aVal.localeCompare(bVal) * dir;
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+      this.classList.toggle('asc');
+      this.classList.toggle('desc');
+    });
+  });
+
+  // Pagination
+  document.querySelectorAll('.pagination-btn').forEach(function(btn) {
+    if (!btn.classList.contains('active')) {
+      btn.addEventListener('click', function() {
+        var parent = this.closest('.table-pagination');
+        if (parent) {
+          parent.querySelectorAll('.pagination-btn').forEach(function(b) {
+            b.classList.remove('active');
+          });
+        }
+        this.classList.add('active');
+      });
+    }
+  });
+
+  // Dashboard search
+  var searchInputs = document.querySelectorAll('.search-wrapper input[type="text"]');
+  searchInputs.forEach(function(input) {
+    input.addEventListener('input', function() {
+      var query = this.value.toLowerCase().trim();
+      var wrapper = this.closest('.dashboard-main, .page-wrapper, body');
+
+      if (!wrapper) return;
+
+      // Search tables
+      wrapper.querySelectorAll('table').forEach(function(table) {
+        var rows = table.querySelectorAll('tbody tr');
+        var visibleCount = 0;
+        rows.forEach(function(row) {
+          if (row.querySelector('.empty-state-sm')) return;
+          var text = row.textContent.toLowerCase();
+          var match = !query || text.indexOf(query) !== -1;
+          row.style.display = match ? '' : 'none';
+          if (match) visibleCount++;
+        });
+
+        // Show/hide empty state for tables
+        var emptyRow = table.querySelector('tbody tr td .empty-state-sm');
+        if (emptyRow) {
+          var parentRow = emptyRow.closest('tr');
+          if (parentRow) {
+            parentRow.style.display = (visibleCount === 0 && query) ? '' : 'none';
+          }
+        }
+
+        // Create/show "no results" row if needed
+        var noResult = table.querySelector('.search-no-results');
+        if (query && visibleCount === 0) {
+          if (!noResult) {
+            noResult = document.createElement('tr');
+            noResult.className = 'search-no-results';
+            noResult.innerHTML = '<td colspan="10"><div class="empty-state-sm"><i class="fas fa-search"></i><h4>No results found</h4><p>No items match your search for "' + query + '"</p></div></td>';
+            table.querySelector('tbody').appendChild(noResult);
+          }
+          noResult.style.display = '';
+        } else if (noResult) {
+          noResult.style.display = 'none';
+        }
+      });
+
+      // Search appointment cards
+      wrapper.querySelectorAll('.appointment-card').forEach(function(card) {
+        var text = card.textContent.toLowerCase();
+        card.style.display = (!query || text.indexOf(query) !== -1) ? '' : 'none';
+      });
+
+      // Search schedule items
+      wrapper.querySelectorAll('.schedule-item').forEach(function(item) {
+        var text = item.textContent.toLowerCase();
+        item.style.display = (!query || text.indexOf(query) !== -1) ? '' : 'none';
+      });
+
+      // Search patient info cards
+      wrapper.querySelectorAll('.patient-info-card').forEach(function(card) {
+        var text = card.textContent.toLowerCase();
+        card.style.display = (!query || text.indexOf(query) !== -1) ? '' : 'none';
+      });
+
+      // Search favorite doctor cards
+      wrapper.querySelectorAll('.fav-doctor-card').forEach(function(card) {
+        var text = card.textContent.toLowerCase();
+        card.style.display = (!query || text.indexOf(query) !== -1) ? '' : 'none';
+      });
+
+      // Search activity feed items
+      wrapper.querySelectorAll('.activity-item').forEach(function(item) {
+        var text = item.textContent.toLowerCase();
+        item.style.display = (!query || text.indexOf(query) !== -1) ? '' : 'none';
+      });
+
+      // Search management cards
+      wrapper.querySelectorAll('.mgmt-card').forEach(function(card) {
+        var text = card.textContent.toLowerCase();
+        card.style.display = (!query || text.indexOf(query) !== -1) ? '' : 'none';
+      });
+
+      // Search sidebar items
+      wrapper.querySelectorAll('.sidebar-item').forEach(function(item) {
+        if (item.closest('.sidebar-header')) return;
+        var text = item.textContent.toLowerCase();
+        item.style.display = (!query || text.indexOf(query) !== -1) ? '' : 'none';
+      });
+
+      // Search stats cards
+      wrapper.querySelectorAll('.stats-card').forEach(function(card) {
+        var text = card.textContent.toLowerCase();
+        card.style.display = (!query || text.indexOf(query) !== -1) ? '' : 'none';
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

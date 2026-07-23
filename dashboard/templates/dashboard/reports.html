@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Reports - HealthCare HMS{% endblock %}
+{% block content %}
+
+<div class="page-header animate-in">
+    <h1><i class="fas fa-chart-bar"></i> Hospital Reports</h1>
+    <p>Overview of your hospital management system</p>
+</div>
+
+<div class="dashboard-grid animate-in animate-in-1">
+    <div class="dash-card">
+        <div class="dash-card-icon" style="background:var(--primary-50);color:var(--primary);">
+            <i class="fas fa-hospital"></i>
+        </div>
+        <h3>Hospitals</h3>
+        <div class="dash-value">{{ hospital_count }}</div>
+    </div>
+    <div class="dash-card">
+        <div class="dash-card-icon" style="background:#fef3c7;color:#d97706;">
+            <i class="fas fa-layer-group"></i>
+        </div>
+        <h3>Departments</h3>
+        <div class="dash-value">{{ department_count }}</div>
+    </div>
+    <div class="dash-card">
+        <div class="dash-card-icon" style="background:#dbeafe;color:#2563eb;">
+            <i class="fas fa-user-md"></i>
+        </div>
+        <h3>Doctors</h3>
+        <div class="dash-value">{{ doctor_count }}</div>
+    </div>
+    <div class="dash-card">
+        <div class="dash-card-icon" style="background:#fce7f3;color:#db2777;">
+            <i class="fas fa-users"></i>
+        </div>
+        <h3>Patients</h3>
+        <div class="dash-value">{{ patient_count }}</div>
+    </div>
+    <div class="dash-card">
+        <div class="dash-card-icon" style="background:#d1fae5;color:#059669;">
+            <i class="fas fa-calendar-check"></i>
+        </div>
+        <h3>Appointments</h3>
+        <div class="dash-value">{{ appointment_count }}</div>
+    </div>
+    <div class="dash-card">
+        <div class="dash-card-icon" style="background:#fef3c7;color:#d97706;">
+            <i class="fas fa-clock"></i>
+        </div>
+        <h3>Pending</h3>
+        <div class="dash-value">{{ pending_count }}</div>
+    </div>
+    <div class="dash-card">
+        <div class="dash-card-icon" style="background:#d1fae5;color:#059669;">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h3>Approved</h3>
+        <div class="dash-value">{{ approved_count }}</div>
+    </div>
+    <div class="dash-card">
+        <div class="dash-card-icon" style="background:#dbeafe;color:#2563eb;">
+            <i class="fas fa-check-double"></i>
+        </div>
+        <h3>Completed</h3>
+        <div class="dash-value">{{ completed_count }}</div>
+    </div>
+    <div class="dash-card">
+        <div class="dash-card-icon" style="background:#fee2e2;color:#dc2626;">
+            <i class="fas fa-times-circle"></i>
+        </div>
+        <h3>Cancelled</h3>
+        <div class="dash-value">{{ cancelled_count }}</div>
+    </div>
+</div>
+
+{% endblock %}

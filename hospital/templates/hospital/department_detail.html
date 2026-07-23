@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Department Details - HealthCare HMS{% endblock %}
+{% block content %}
+
+<div class="page-header animate-in">
+    <h1>{{ department.name }}</h1>
+    <p>{{ department.hospital.name }}</p>
+</div>
+
+<div class="doctor-grid animate-in animate-in-1">
+    {% for doctor in doctors %}
+    <div class="doctor-card">
+        {% if doctor.photo %}
+        <img src="{{ doctor.photo.url }}" alt="Doctor" class="doctor-card-img">
+        {% else %}
+        <div class="doctor-card-img avatar" style="margin:1.75rem auto 1rem;width:100px;height:100px;font-size:2rem;">
+            <i class="fas fa-user-md"></i>
+        </div>
+        {% endif %}
+        <div class="doctor-card-body">
+            <h3>Dr. {{ doctor.user.get_full_name }}</h3>
+            <div class="specialty">{{ doctor.specialization }}</div>
+            <div class="meta"><i class="fas fa-star"></i> {{ doctor.experience }} Years Exp.</div>
+            <div class="meta"><i class="fas fa-rupee-sign"></i> ₹ {{ doctor.consultation_fee }}</div>
+            <a href="{% url 'doctor_detail' doctor.id %}" class="btn btn-primary btn-sm" style="margin-top:1rem;">
+                <i class="fas fa-user"></i> View Profile
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-state" style="grid-column:1/-1;">
+        <div class="empty-icon"><i class="fas fa-user-md"></i></div>
+        <h3>No Doctors Available</h3>
+        <p>No doctors are currently assigned to this department.</p>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

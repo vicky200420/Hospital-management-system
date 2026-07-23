@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Hospitals - HealthCare HMS{% endblock %}
+{% block content %}
+
+<div class="page-header animate-in">
+    <h1>Our Hospitals</h1>
+    <p>Find the best healthcare facilities near you</p>
+</div>
+
+<div class="hospital-list animate-in animate-in-1">
+    {% for hospital in hospitals %}
+    <div class="hospital-card">
+        <h2><a href="{% url 'hospital_detail' hospital.id %}">{{ hospital.name }}</a></h2>
+        <div class="hospital-meta">
+            <span><i class="fas fa-map-marker-alt"></i> {{ hospital.address }}</span>
+            <span><i class="fas fa-phone"></i> {{ hospital.phone }}</span>
+            <span><i class="fas fa-envelope"></i> {{ hospital.email }}</span>
+        </div>
+        <a href="{% url 'hospital_detail' hospital.id %}" class="btn btn-primary btn-sm">
+            <i class="fas fa-user-md"></i> View Doctors
+        </a>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+        <div class="empty-icon"><i class="fas fa-hospital"></i></div>
+        <h3>No Hospitals Available</h3>
+        <p>We are currently adding hospitals to our network.</p>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

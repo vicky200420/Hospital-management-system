@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}{% if editing %}Edit Department{% else %}Add Department{% endif %} - HealthCare HMS{% endblock %}
+{% block content %}
+
+<div class="page-header animate-in">
+    <h1><i class="fas fa-{% if editing %}edit{% else %}plus-circle{% endif %}"></i> {% if editing %}Edit Department{% else %}Add Department{% endif %}</h1>
+</div>
+
+<div class="form-card animate-in animate-in-1">
+    <a href="{% url 'admin_department_list' %}" class="btn btn-sm" style="background:var(--text-muted);color:#fff;margin-bottom:1rem;">
+        <i class="fas fa-arrow-left"></i> Back
+    </a>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary btn-block btn-lg">
+            <i class="fas fa-save"></i> {% if editing %}Update Department{% else %}Save Department{% endif %}
+        </button>
+    </form>
+</div>
+
+{% endblock %}

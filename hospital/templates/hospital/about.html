@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}About Us - HealthCare HMS{% endblock %}
+{% block content %}
+
+<div class="page-header animate-in">
+    <h1>About Our Hospital</h1>
+    <p>Providing quality healthcare with experienced doctors and modern facilities</p>
+</div>
+
+<div class="about-section animate-in animate-in-1">
+    <div class="about-image">
+        <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=900&q=80" alt="Hospital">
+    </div>
+    <div class="about-text">
+        <h2>Who We Are</h2>
+        <p>Our Hospital Management System helps patients easily find doctors, book appointments, and manage their healthcare online. We bridge the gap between patients and healthcare providers.</p>
+        <p>We are committed to providing quality healthcare with experienced specialists, modern medical technology, and compassionate care. Our mission is to make healthcare accessible, efficient, and patient-centric.</p>
+        <a href="{% url 'contact' %}" class="btn btn-primary"><i class="fas fa-phone-alt"></i> Contact Us</a>
+    </div>
+</div>
+
+<div class="section animate-in">
+    <h2 class="section-title">Our Achievements</h2>
+    <p class="section-subtitle">Numbers that speak for themselves</p>
+    <div class="stats-grid">
+        <div class="stat-card colored">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Experienced Doctors</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Emergency Services</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">10K+</div>
+            <div class="stat-label">Happy Patients</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">15+</div>
+            <div class="stat-label">Departments</div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

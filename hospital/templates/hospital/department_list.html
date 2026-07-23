@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Departments - HealthCare HMS{% endblock %}
+{% block content %}
+
+<div class="page-header animate-in">
+    <h1>Hospital Departments</h1>
+    <p>Explore our specialized medical departments</p>
+</div>
+
+<div class="grid grid-auto animate-in animate-in-1">
+    {% for department in departments %}
+    <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
+        <h3>{{ department.name }}</h3>
+        <p>{{ department.hospital.name }}</p>
+        <p style="font-size:0.9rem;margin-top:0.5rem;color:var(--text-muted);">{{ department.description|truncatewords:20 }}</p>
+        <a href="{% url 'department_detail' department.id %}" class="btn btn-primary btn-sm" style="margin-top:1rem;">
+            <i class="fas fa-user-md"></i> View Doctors
+        </a>
+    </div>
+    {% empty %}
+    <div class="empty-state" style="grid-column:1/-1;">
+        <div class="empty-icon"><i class="fas fa-layer-group"></i></div>
+        <h3>No Departments Available</h3>
+        <p>Departments will be listed here once added.</p>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

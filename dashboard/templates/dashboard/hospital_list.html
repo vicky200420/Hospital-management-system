@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Manage Hospitals - HealthCare HMS{% endblock %}
+{% block content %}
+
+<div class="section-heading animate-in">
+    <h1><i class="fas fa-hospital"></i> Hospital List</h1>
+    <a href="{% url 'add_hospital' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add Hospital
+    </a>
+</div>
+
+<div class="animate-in animate-in-1">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Hospital Name</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Total Doctors</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for hospital in hospitals %}
+                <tr>
+                    <td>{{ hospital.id }}</td>
+                    <td><strong>{{ hospital.name }}</strong></td>
+                    <td>{{ hospital.address }}</td>
+                    <td>{{ hospital.phone }}</td>
+                    <td>{{ hospital.doctors.count }}</td>
+                    <td>
+                        <div class="action-group">
+                            <a href="{% url 'edit_hospital' hospital.id %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'delete_hospital' hospital.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Delete {{ hospital.name }}?')">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align:center;color:var(--text-muted);">
+                        <i class="fas fa-hospital"></i> No hospitals found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

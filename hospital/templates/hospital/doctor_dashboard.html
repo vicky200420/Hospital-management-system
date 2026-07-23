@@ -1,0 +1,382 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Doctor Dashboard - HealthCare HMS{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+  <aside class="dashboard-sidebar" role="navigation" aria-label="Doctor navigation">
+    <div class="sidebar-header">
+      <h4>Doctor Menu</h4>
+      <button class="sidebar-toggle" aria-label="Toggle sidebar">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-title">Overview</div>
+      <a href="#" class="sidebar-item active">
+        <i class="fas fa-chart-pie"></i>
+        <span>Dashboard</span>
+      </a>
+
+      <div class="sidebar-section-title">Appointments</div>
+      <a href="{% url 'doctor_appointments' %}" class="sidebar-item">
+        <i class="fas fa-calendar-day"></i>
+        <span>My Appointments</span>
+        <span class="sidebar-badge">12</span>
+      </a>
+      <a href="{% url 'manage_time_slots' %}" class="sidebar-item">
+        <i class="fas fa-clock"></i>
+        <span>Time Slots</span>
+      </a>
+
+      <div class="sidebar-section-title">Patients</div>
+      <a href="{% url 'doctor_patients' %}" class="sidebar-item">
+        <i class="fas fa-users"></i>
+        <span>My Patients</span>
+        <span class="sidebar-badge">48</span>
+      </a>
+
+      <div class="sidebar-section-title">Profile</div>
+      <a href="{% url 'doctor_profile' %}" class="sidebar-item">
+        <i class="fas fa-user-circle"></i>
+        <span>My Profile</span>
+      </a>
+      <a href="#" class="sidebar-item">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+  </aside>
+
+  <div class="sidebar-overlay"></div>
+
+  <main class="dashboard-main">
+    <div class="dashboard-topbar">
+      <div class="topbar-left">
+        <button class="sidebar-mobile-toggle" aria-label="Open sidebar">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div>
+          <h1>Doctor Dashboard</h1>
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-top:2px;">{{ request.user.doctor.specialization|default:"General Medicine" }}</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search patients..." aria-label="Search patients">
+        </div>
+        <div class="dropdown">
+          <button class="notification-btn dropdown-toggle" aria-label="Notifications">
+            <i class="fas fa-bell"></i>
+            <span class="notification-dot"></span>
+          </button>
+          <div class="dropdown-menu">
+            <div class="dropdown-menu-header">
+              <h4>Notifications</h4>
+              <span>Mark all read</span>
+            </div>
+            <div class="notification-item unread">
+              <div class="notification-icon blue"><i class="fas fa-calendar-plus"></i></div>
+              <div>
+                <div class="notification-text">New appointment from <strong>Ananya Kumar</strong></div>
+                <div class="notification-time">10 minutes ago</div>
+              </div>
+            </div>
+            <div class="notification-item unread">
+              <div class="notification-icon green"><i class="fas fa-check-circle"></i></div>
+              <div>
+                <div class="notification-text">Appointment <strong>#204</strong> completed</div>
+                <div class="notification-time">30 minutes ago</div>
+              </div>
+            </div>
+            <div class="dropdown-menu-footer">
+              <a href="#">View all notifications</a>
+            </div>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="profile-btn dropdown-toggle" aria-label="Profile menu">
+            <div class="profile-avatar">D</div>
+            <span class="profile-name">Dr. {{ request.user.get_full_name|default:request.user.username }}</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="dropdown-menu profile-dropdown-menu">
+            <div class="profile-dropdown-header">
+              <h4>Dr. {{ request.user.get_full_name|default:request.user.username }}</h4>
+              <p>{{ request.user.doctor.specialization|default:"Physician" }}</p>
+            </div>
+            <a href="{% url 'doctor_profile' %}" class="dropdown-item"><i class="fas fa-user-circle"></i> My Profile</a>
+            <a href="{% url 'manage_time_slots' %}" class="dropdown-item"><i class="fas fa-clock"></i> Time Slots</a>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item dark-mode-toggle">
+              <i class="fas fa-moon"></i> Dark Mode
+            </button>
+            <div class="dropdown-divider"></div>
+            <a href="{% url 'logout' %}" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="welcome-banner animate-in">
+      <div class="welcome-banner-content">
+        <div class="welcome-banner-text">
+          <h1>Good {{ request.user.get_full_name|default:"Doctor" }}! 👋</h1>
+          <p>You have <strong>4 appointments</strong> scheduled today. Stay on top of your schedule.</p>
+        </div>
+        <div class="welcome-banner-actions">
+          <a href="{% url 'doctor_appointments' %}" class="btn"><i class="fas fa-calendar-day"></i> View Schedule</a>
+          <a href="{% url 'manage_time_slots' %}" class="btn"><i class="fas fa-clock"></i> Manage Slots</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-card-grid animate-in animate-in-1">
+      <div class="stats-card">
+        <div class="stats-card-icon blue"><i class="fas fa-calendar-day"></i></div>
+        <div class="stats-card-info">
+          <div class="stats-card-label">Today's Appointments</div>
+          <div class="stats-card-value">4</div>
+          <div class="stats-card-change up"><i class="fas fa-arrow-up"></i> 2 new</div>
+        </div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-card-icon purple"><i class="fas fa-calendar-week"></i></div>
+        <div class="stats-card-info">
+          <div class="stats-card-label">Upcoming</div>
+          <div class="stats-card-value">12</div>
+          <div class="stats-card-change">Next 7 days</div>
+        </div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-card-icon green"><i class="fas fa-check-circle"></i></div>
+        <div class="stats-card-info">
+          <div class="stats-card-label">Completed</div>
+          <div class="stats-card-value">128</div>
+          <div class="stats-card-change up"><i class="fas fa-arrow-up"></i> This month</div>
+        </div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-card-icon orange"><i class="fas fa-hourglass-half"></i></div>
+        <div class="stats-card-info">
+          <div class="stats-card-label">Pending</div>
+          <div class="stats-card-value">3</div>
+          <div class="stats-card-change down">Requires action</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="split-grid animate-in animate-in-2">
+      <div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title"><i class="fas fa-clock" style="margin-right:8px;"></i> Today's Schedule</span>
+            <button class="chart-action">Full Schedule →</button>
+          </div>
+          <div class="chart-body" style="padding:var(--space-4);">
+            <div class="schedule-item">
+              <div class="schedule-time">09:00</div>
+              <div class="schedule-line green"></div>
+              <div class="schedule-info">
+                <h4>Rahul Sharma</h4>
+                <p>Cardiology Checkup</p>
+              </div>
+              <span class="badge badge-approved">Confirmed</span>
+            </div>
+            <div class="schedule-item">
+              <div class="schedule-time">10:30</div>
+              <div class="schedule-line blue"></div>
+              <div class="schedule-info">
+                <h4>Priya Patel</h4>
+                <p>General Consultation</p>
+              </div>
+              <span class="badge badge-pending">Waiting</span>
+            </div>
+            <div class="schedule-item">
+              <div class="schedule-time">11:45</div>
+              <div class="schedule-line blue"></div>
+              <div class="schedule-info">
+                <h4>Amit Singh</h4>
+                <p>Follow-up Visit</p>
+              </div>
+              <span class="badge badge-pending">Waiting</span>
+            </div>
+            <div class="schedule-item">
+              <div class="schedule-time">14:00</div>
+              <div class="schedule-line orange"></div>
+              <div class="schedule-info">
+                <h4>Neha Gupta</h4>
+                <p>ECG Review</p>
+              </div>
+              <span class="badge badge-pending">Upcoming</span>
+            </div>
+            <div class="schedule-item">
+              <div class="schedule-time">15:30</div>
+              <div class="schedule-line green"></div>
+              <div class="schedule-info">
+                <h4>Vikram Joshi</h4>
+                <p>Stress Test Results</p>
+              </div>
+              <span class="badge badge-approved">Confirmed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title"><i class="fas fa-calendar-alt" style="margin-right:8px;"></i> July 2026</span>
+            <span></span>
+          </div>
+          <div class="chart-body" style="padding:var(--space-3);">
+            <div class="calendar-header" style="border:none;padding:var(--space-2) 0;">
+              <button class="calendar-nav-btn"><i class="fas fa-chevron-left"></i></button>
+              <h4>July 2026</h4>
+              <button class="calendar-nav-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="calendar-weekdays">
+              <div class="calendar-weekday">Su</div>
+              <div class="calendar-weekday">Mo</div>
+              <div class="calendar-weekday">Tu</div>
+              <div class="calendar-weekday">We</div>
+              <div class="calendar-weekday">Th</div>
+              <div class="calendar-weekday">Fr</div>
+              <div class="calendar-weekday">Sa</div>
+            </div>
+            <div class="calendar-days">
+              <div class="calendar-day other-month">29</div>
+              <div class="calendar-day other-month">30</div>
+              <div class="calendar-day">1</div>
+              <div class="calendar-day">2</div>
+              <div class="calendar-day">3</div>
+              <div class="calendar-day">4</div>
+              <div class="calendar-day">5</div>
+              <div class="calendar-day">6</div>
+              <div class="calendar-day">7</div>
+              <div class="calendar-day has-event">8</div>
+              <div class="calendar-day">9</div>
+              <div class="calendar-day">10</div>
+              <div class="calendar-day">11</div>
+              <div class="calendar-day">12</div>
+              <div class="calendar-day has-event">13</div>
+              <div class="calendar-day">14</div>
+              <div class="calendar-day">15</div>
+              <div class="calendar-day">16</div>
+              <div class="calendar-day has-event">17</div>
+              <div class="calendar-day">18</div>
+              <div class="calendar-day">19</div>
+              <div class="calendar-day">20</div>
+              <div class="calendar-day">21</div>
+              <div class="calendar-day">22</div>
+              <div class="calendar-day">23</div>
+              <div class="calendar-day today">24</div>
+              <div class="calendar-day">25</div>
+              <div class="calendar-day">26</div>
+              <div class="calendar-day">27</div>
+              <div class="calendar-day">28</div>
+              <div class="calendar-day">29</div>
+              <div class="calendar-day">30</div>
+              <div class="calendar-day">31</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="split-grid animate-in animate-in-3" style="margin-top:var(--space-6);">
+      <div>
+        <div class="section-divider">
+          <h2><i class="fas fa-user-injured"></i> Recent Patients</h2>
+          <a href="{% url 'doctor_patients' %}" class="section-link">View All →</a>
+        </div>
+        <div class="patient-info-card">
+          <div class="patient-info-header">
+            <div class="patient-avatar-large">RK</div>
+            <h3>Rahul Kumar</h3>
+            <p>Patient ID: #P-2041</p>
+          </div>
+          <div class="patient-details">
+            <div class="patient-detail-item">
+              <span class="patient-detail-label">Age / Gender</span>
+              <span class="patient-detail-value">34 / Male</span>
+            </div>
+            <div class="patient-detail-item">
+              <span class="patient-detail-label">Contact</span>
+              <span class="patient-detail-value">+91 98765 43210</span>
+            </div>
+            <div class="patient-detail-item">
+              <span class="patient-detail-label">Appointment</span>
+              <span class="patient-detail-value">Today, 09:00 AM</span>
+            </div>
+            <div class="patient-detail-item">
+              <span class="patient-detail-label">Status</span>
+              <span class="patient-status confirmed"><span class="status-dot green"></span> Confirmed</span>
+            </div>
+            <div class="patient-detail-item" style="border:none;padding-top:var(--space-4);">
+              <div class="quick-actions">
+                <button class="quick-action-btn"><i class="fas fa-eye"></i> View</button>
+                <button class="quick-action-btn"><i class="fas fa-edit"></i> Notes</button>
+                <button class="quick-action-btn"><i class="fas fa-history"></i> History</button>
+                <button class="quick-action-btn" style="color:var(--success);border-color:var(--success-border);">
+                  <i class="fas fa-check-circle"></i> Complete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="section-divider">
+          <h2><i class="fas fa-clock"></i> Recent Activity</h2>
+        </div>
+        <div class="chart-card">
+          <div class="chart-body" style="padding:var(--space-4);">
+            <div class="activity-feed">
+              <div class="activity-item">
+                <div class="activity-icon green"><i class="fas fa-check-circle"></i></div>
+                <div class="activity-content">
+                  <div class="activity-text">Completed appointment with <strong>Ananya Kumar</strong></div>
+                  <div class="activity-time">15 minutes ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon blue"><i class="fas fa-file-prescription"></i></div>
+                <div class="activity-content">
+                  <div class="activity-text">Prescription issued for <strong>Vikram Joshi</strong></div>
+                  <div class="activity-time">1 hour ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon orange"><i class="fas fa-calendar-plus"></i></div>
+                <div class="activity-content">
+                  <div class="activity-text">New appointment booked by <strong>Neha Gupta</strong></div>
+                  <div class="activity-time">2 hours ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon purple"><i class="fas fa-user-md"></i></div>
+                <div class="activity-content">
+                  <div class="activity-text">Profile updated successfully</div>
+                  <div class="activity-time">Yesterday</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:var(--space-5);">
+          <div class="section-divider">
+            <h2><i class="fas fa-bell"></i> Quick Actions</h2>
+          </div>
+          <div class="quick-actions">
+            <a href="{% url 'doctor_appointments' %}" class="quick-action-btn"><i class="fas fa-calendar-day"></i> View Appointments</a>
+            <a href="{% url 'doctor_patients' %}" class="quick-action-btn"><i class="fas fa-users"></i> My Patients</a>
+            <a href="{% url 'doctor_profile' %}" class="quick-action-btn"><i class="fas fa-user-circle"></i> View Profile</a>
+            <a href="{% url 'manage_time_slots' %}" class="quick-action-btn"><i class="fas fa-clock"></i> Manage Slots</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Manage Doctors - HealthCare HMS{% endblock %}
+{% block content %}
+
+<div class="section-heading animate-in">
+    <h1><i class="fas fa-user-md"></i> Doctor List</h1>
+    <a href="{% url 'add_doctor' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add Doctor
+    </a>
+</div>
+
+<div class="animate-in animate-in-1">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Photo</th>
+                    <th>Doctor</th>
+                    <th>Hospital</th>
+                    <th>Department</th>
+                    <th>Specialization</th>
+                    <th>Experience</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doctor in doctors %}
+                <tr>
+                    <td>
+                        {% if doctor.photo %}
+                        <img src="{{ doctor.photo.url }}" alt="Doctor" style="width:44px;height:44px;border-radius:50%;object-fit:cover;">
+                        {% else %}
+                        <div class="avatar" style="width:44px;height:44px;margin:auto;"><i class="fas fa-user-md"></i></div>
+                        {% endif %}
+                    </td>
+                    <td><strong>Dr. {{ doctor.user.get_full_name }}</strong></td>
+                    <td>{{ doctor.hospital.name }}</td>
+                    <td>{{ doctor.department.name }}</td>
+                    <td>{{ doctor.specialization }}</td>
+                    <td>{{ doctor.experience }} Years</td>
+                    <td>
+                        {% if doctor.available %}
+                        <span class="badge badge-available"><i class="fas fa-check-circle"></i> Available</span>
+                        {% else %}
+                        <span class="badge badge-unavailable"><i class="fas fa-times-circle"></i> Unavailable</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="action-group">
+                            <a href="{% url 'edit_doctor' doctor.id %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'delete_doctor' doctor.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Delete Dr. {{ doctor.user.get_full_name }}?')">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" style="text-align:center;color:var(--text-muted);">
+                        <i class="fas fa-user-md"></i> No doctors found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

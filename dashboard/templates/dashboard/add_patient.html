@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}{% if editing %}Edit Patient{% else %}Add Patient{% endif %} - HealthCare HMS{% endblock %}
+{% block content %}
+
+<div class="page-header animate-in">
+    <h1><i class="fas fa-{% if editing %}edit{% else %}plus-circle{% endif %}"></i> {% if editing %}Edit Patient{% else %}Add Patient{% endif %}</h1>
+</div>
+
+<div class="form-card wide animate-in animate-in-1">
+    <form method="POST">
+        {% csrf_token %}
+
+        <h3 style="margin-bottom:1rem;">Account Details</h3>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Username</label>
+                {{ user_form.username }}
+                {% if user_form.username.errors %}<div style="color:var(--danger);font-size:0.85rem;">{{ user_form.username.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                {{ user_form.email }}
+                {% if user_form.email.errors %}<div style="color:var(--danger);font-size:0.85rem;">{{ user_form.email.errors }}</div>{% endif %}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>First Name</label>
+                {{ user_form.first_name }}
+            </div>
+            <div class="form-group">
+                <label>Last Name</label>
+                {{ user_form.last_name }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Phone</label>
+                {{ user_form.phone }}
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                {{ user_form.password }}
+                {% if user_form.password.help_text %}<div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.25rem;">{{ user_form.password.help_text }}</div>{% endif %}
+            </div>
+        </div>
+
+        <h3 style="margin:1.5rem 0 1rem;">Personal Details</h3>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Date of Birth</label>
+                {{ profile_form.date_of_birth }}
+            </div>
+            <div class="form-group">
+                <label>Gender</label>
+                {{ profile_form.gender }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Blood Group</label>
+                {{ profile_form.blood_group }}
+            </div>
+            <div class="form-group">
+                <label>Emergency Contact</label>
+                {{ profile_form.emergency_contact }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Address</label>
+            {{ profile_form.address }}
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg">
+            <i class="fas fa-save"></i> {% if editing %}Update Patient{% else %}Save Patient{% endif %}
+        </button>
+    </form>
+</div>
+
+{% endblock %}
